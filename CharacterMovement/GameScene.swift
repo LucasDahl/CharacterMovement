@@ -22,10 +22,15 @@ class GameScene: SKScene {
         // Set the actual frame
         //self.anchorPoint = CGPoint(x: 0.5, y: 0)
         
+        
+        // Adds the a little drift similiar to wind
+        self.physicsWorld.gravity = CGVector(dx: 1, dy: 0)
+        
         // Check that the node is not nil
         if let someplayer = self.childNode(withName: "Player") as? SKSpriteNode {
             thePlayer = someplayer
-            thePlayer.physicsBody?.isDynamic = true
+            thePlayer.physicsBody?.isDynamic = false
+            thePlayer.physicsBody?.affectedByGravity = false
         }
         
     }
@@ -42,11 +47,25 @@ class GameScene: SKScene {
     
     func moveDown() {
         
-        // Creat the move action
+        // Let the player be affected by gravity for a "wind" affect
+        thePlayer.physicsBody?.isDynamic = true
+        thePlayer.physicsBody?.affectedByGravity = true
+
+        // Creat the move action - maybe add a group tp add a delay
+        let wait = SKAction.wait(forDuration: 0.05)
+        let walkAnimation = SKAction(named: "WalkFront")!
         let moveAction = SKAction.moveBy(x: 0, y: -100, duration: 1)
-        
+        let finish = SKAction.run {
+            // After the player is dont walking, make him not affected by wind wile he stands
+            self.thePlayer.physicsBody?.isDynamic = false
+            self.thePlayer.physicsBody?.affectedByGravity = false
+        }
+
+        // Group all the actions together
+        let sequence = SKAction.group([wait, walkAnimation, moveAction, finish])
+
         // Apply the action to the player
-        thePlayer.run(moveAction)
+        thePlayer.run(sequence)
         
     }
     
