@@ -55,7 +55,7 @@ class GameScene: SKScene {
         let moveAction = SKAction.moveBy(x: 0, y: -100, duration: 1)
         let group = SKAction.group([walkAnimation, moveAction])
         let finish = SKAction.run {
-            // After the player is dont walking, make him not affected by wind wile he stands
+            // After the player is done walking, make him not affected by "wind" wile he stands
             self.thePlayer.physicsBody?.isDynamic = false
             self.thePlayer.physicsBody?.affectedByGravity = false
         }
