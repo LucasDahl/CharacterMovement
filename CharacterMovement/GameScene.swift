@@ -16,6 +16,10 @@ class GameScene: SKScene {
     // MARK: - Properties
     var thePlayer: SKSpriteNode = SKSpriteNode()
     var movementSpeed: TimeInterval = 1
+    let swipeRightRec = UISwipeGestureRecognizer()
+    let swipeLeftRec = UISwipeGestureRecognizer()
+    let rotateRec = UIRotationGestureRecognizer()
+    let tapRec = UITapGestureRecognizer()
     
     override func didMove(to view: SKView) {
         
@@ -25,7 +29,26 @@ class GameScene: SKScene {
         // Adds the a little drift similiar to wind
         self.physicsWorld.gravity = CGVector(dx: 1, dy: 0)
         
-        // Check that the node is not nil
+        // Rotation Gestures
+        rotateRec.addTarget(self, action: #selector(GameScene.rotatedView(_:)))
+        self.view?.addGestureRecognizer(rotateRec)
+        
+        // Tap Gestures
+        tapRec.addTarget(self, action: #selector(GameScene.tappedView))
+        tapRec.numberOfTouchesRequired = 1
+        tapRec.numberOfTapsRequired = 1
+        self.view?.addGestureRecognizer(tapRec)
+        
+        // Swipe Gestures
+        swipeRightRec.addTarget(self, action: #selector(GameScene.swipedRight))
+        swipeRightRec.direction = .right
+        self.view?.addGestureRecognizer(swipeRightRec)
+        
+        swipeLeftRec.addTarget(self, action: #selector(GameScene.swipedLeft))
+        swipeLeftRec.direction = .left
+        self.view?.addGestureRecognizer(swipeLeftRec)
+        
+        // Check that the node for the player is not nil
         if let someplayer = self.childNode(withName: "Player") as? SKSpriteNode {
             thePlayer = someplayer
             thePlayer.physicsBody?.isDynamic = true
@@ -40,9 +63,43 @@ class GameScene: SKScene {
         
     }
     
+    //==================
+    // MARK: - Selectors
+    //==================
+    
+    @objc func swipedRight() {
+        
+    }
+    
+    @objc func swipedLeft() {
+        
+    }
+    
+    @objc func rotatedView(_ sender:UIRotationGestureRecognizer) {
+        
+        if sender.state == .began {
+            
+        }
+        
+        
+    }
+    
+    @objc func tappedView() {
+        
+    }
+    
     //================
     // MARK: - Methods
     //================
+    
+    func cleanUp() {
+        
+        // removes the gestures when presenting a different scene class
+        for gesture in self.view!.gestureRecognizers! {
+            self.view?.removeGestureRecognizer(gesture)
+        }
+        
+    }
     
     func moveDown() {
         
@@ -77,6 +134,7 @@ class GameScene: SKScene {
     
     func touchDown(atPoint pos : CGPoint) {
         
+        /*
         if pos.y > 0 {
             
             // Top half
@@ -87,7 +145,7 @@ class GameScene: SKScene {
             moveDown()
             
         }
-        
+        */
     }
     
     func touchMoved(toPoint pos : CGPoint) {
