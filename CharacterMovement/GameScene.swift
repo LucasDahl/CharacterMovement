@@ -11,10 +11,11 @@ import GameplayKit
 
 class GameScene: SKScene {
     
-    // Part 4
+    
     
     // MARK: - Properties
     var thePlayer: SKSpriteNode = SKSpriteNode()
+    var movementSpeed: TimeInterval = 1
     
     override func didMove(to view: SKView) {
         
@@ -52,7 +53,7 @@ class GameScene: SKScene {
         // Creat the move action - maybe add a group tp add a delay
         let wait = SKAction.wait(forDuration: 0.05)
         let walkAnimation = SKAction(named: "WalkFront")!
-        let moveAction = SKAction.moveBy(x: 0, y: -100, duration: 1)
+        let moveAction = SKAction.moveBy(x: 0, y: -100, duration: movementSpeed)
         let group = SKAction.group([walkAnimation, moveAction])
         let finish = SKAction.run {
             // After the player is done walking, make him not affected by "wind" wile he stands
@@ -60,6 +61,8 @@ class GameScene: SKScene {
             self.thePlayer.physicsBody?.affectedByGravity = false
         }
 
+        // Note run will run all code simultaneously and sequence will run the code in sequence
+        
         // Group all the actions together
         let sequence = SKAction.sequence([wait, group, finish])
 
